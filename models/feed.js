@@ -19,6 +19,8 @@ async function createFeed() {
         tags: ['angular', 'front end'],
         article: 'this will be the long ass article that will be displayed'
     });
+    const result = await feed.save()
+    console.log(result)
 }
 
-createFeed();
+module.exports = Feed;
