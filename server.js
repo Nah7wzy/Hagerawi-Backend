@@ -19,5 +19,5 @@ app.use('/feeds', feedsRoute);
 app.use('/events', eventsRoute);
 
 app.listen(5000, ()=>{
-    console.log(`Server Running on Port: http://Localhost:5000`);
+    console.log(`Server Running on Port: http://localhost:5000`);
 });
