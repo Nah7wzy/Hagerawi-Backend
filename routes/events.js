@@ -1,24 +1,27 @@
 const express = require('express');
-const {EventModel} = require('../models/models.js');
+const {
+    EventModel
+} = require('../models/models.js');
 // import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
 
 //gets all events
-router.get('/', async (req,res)=>{
-    try{
+router.get('/', async (req, res) => {
+    try {
         const events = await EventModel.find();
         res.json(events);
-    }
-    catch(error){
+    } catch (error) {
         res.send(error.message);
     }
 });
 
 // gets a specific event by title
-router.get('/:title', async (req, res)=>{
+router.get('/:title', async (req, res) => {
     try {
-        const result = await EventModel.find({title: req.params.title});
+        const result = await EventModel.find({
+            title: req.params.title
+        });
         res.send(result);
     } catch (error) {
         res.send(error.message);
@@ -26,7 +29,7 @@ router.get('/:title', async (req, res)=>{
 });
 
 //post an event; admin privileges required 
-router.post('/', async (req, res)=>{
+router.post('/', async (req, res) => {
     const event = new EventModel({
         postedBy: req.body.postedBy,
         title: req.body.title,
@@ -37,7 +40,7 @@ router.post('/', async (req, res)=>{
     try {
         const savedEvent = await event.save();
         res.send(savedEvent);
-    } catch (error){
+    } catch (error) {
         res.send(error.message);
     }
 });
@@ -46,15 +49,15 @@ router.post('/', async (req, res)=>{
 // patch request goes here
 
 // delete request goes here //requieres admin privileges
-router.delete('/:id', async (req, res)=>{
-    const event_num = event.find(c => c.id ===parseInt(req.params.id));
-    if (!course res.status (404).send ('The course with the given ID was not found'));
+router.delete('/:id', async (req, res) => {
+    const event_num = event.find(c => c.id === parseInt(req.params.id));
+    if (!course) res.status(404).send('The course with the given ID was not found');
 
     const index = event.indexOf(event_num);
-    event.splice(index,1);
+    event.splice(index, 1);
 
     res.send(course);
-    
+
 });
 
 module.exports = router;
