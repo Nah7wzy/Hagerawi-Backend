@@ -46,5 +46,15 @@ router.post('/', async (req, res)=>{
 // patch request goes here
 
 // delete request goes here //requieres admin privileges
+router.delete('/:id', async (req, res)=>{
+    const event_num = event.find(c => c.id ===parseInt(req.params.id));
+    if (!course res.status (404).send ('The course with the given ID was not found'));
+
+    const index = event.indexOf(event_num);
+    event.splice(index,1);
+
+    res.send(course);
+    
+});
 
 module.exports = router;
