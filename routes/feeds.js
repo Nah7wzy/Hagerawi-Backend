@@ -13,7 +13,7 @@ const headers = {
 
 // gets all feeds in our database
 router.get('/', async(req, res)=>{
-    res.header(headers);
+    req.header(headers);
     try {
         const theFeeds = await FeedModel.find();
         res.send(theFeeds);
@@ -42,6 +42,5 @@ router.post('/', async (req,res)=>{
 // patch request goes here
 
 // delete request goes here //requieres admin privileges
-
 
 module.exports = router;
