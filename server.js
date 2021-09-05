@@ -18,6 +18,9 @@ app.use(express.json());
 app.use('/feeds', feedsRoute);
 app.use('/events', eventsRoute);
 
+const cors = require("cors");
+app.use(cors());
+
 app.listen(5000, ()=>{
     console.log(`Server Running on Port: http://Localhost:5000`);
 });
