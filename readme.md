@@ -3,3 +3,4 @@ requiered packages:
     - nodemon
     - mongoose
     - dotenv
+    - cors
