@@ -11,7 +11,7 @@ const headers = {
     "Access-Control-Allow-Methods": "POST, OPTIONS"
 }
 
-router.get('/questions', async(req,res) => {
+router.get('/', async(req,res) => {
     res.header(headers)
     try{
         const theQues = await QuestionModel.find();
