@@ -1,7 +1,5 @@
 const express = require('express');
-const {
-    EventModel
-} = require('../models/models.js');
+const {EventModel} = require('../models/models.js');
 // import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
