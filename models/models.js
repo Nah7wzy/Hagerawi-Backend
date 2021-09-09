@@ -1,3 +1,5 @@
+const Joi = require('@hapi/joi');
+
 const mongoose = require('mongoose');
 
 //what a single feed is going to look like
@@ -69,10 +71,15 @@ const eventSchema = mongoose.Schema({
 const userSchema = mongoose.Schema({
     username: {
         type: String,
+        minlength: 5,
+        maxlength: 50,
+        unique: true,
         required: true
     },
     password: {
         type: String,
+        minlength: 8,
+        maxlength: 255,
         required: true
     },
     archivedFeeds: {
@@ -92,10 +99,6 @@ const questionSchema = mongoose.Schema({
     answers: {
         type: String,
         required: true,
-    },
-    score: {
-        type: Number,
-        required: true
     },
     imgUrl: {
         type: String,

@@ -1,6 +1,7 @@
 const express = require('express');
 const {
-    UserModel
+    UserModel,
+    validate
 } = require('../models/models');
 
 const router = express.Router();
@@ -12,17 +13,15 @@ const headers = {
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
 }
 // gets all users
-router.get(
-    '/', async () => {
-        res.header(headers);
-        try {
-            const users = await UserModel.find();
-            res.json(users);
-        } catch (error) {
-            res.send(error.message);
-        }
+router.get('/', async (req, res) => {
+    res.header(headers);
+    try {
+        const users = await UserModel.find();
+        res.json(users);
+    } catch (error) {
+        res.send(error.message);
     }
-);
+});
 
 // get specific user 
 router.get('/:username', async (req, res) => {
@@ -40,21 +39,27 @@ router.get('/:username', async (req, res) => {
 // when user signs up 
 router.post('/', async (req, res) => {
     res.header(headers);
-    const user = new UserModel({
+
+    let user = await UserModel.findOne({
+        username: req.body.username
+    });
+    if (user) return res.status(400).send("User already exists!");
+
+    user = new UserModel({
         username: req.body.username,
         password: req.body.password,
         archivedFeeds: req.body.archivedFeeds,
     });
     try {
-        const savedUser = await user.save();
-        res.send(savedUser);
+        await user.save();
+        res.send(user);
     } catch (error) {
         res.send(error.message);
     }
 });
 
 // when admin deletes a user account 
-router.delete('/:userusername', async (req, res) => {
+router.delete('/:username', async (req, res) => {
     try {
         const deletedUser = await UserModel.remove({
             username: req.params.username
