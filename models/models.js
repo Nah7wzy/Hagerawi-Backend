@@ -1,3 +1,5 @@
+const Joi = require('@hapi/joi');
+
 const mongoose = require('mongoose');
 
 //what a single feed is going to look like
@@ -25,6 +27,10 @@ const feedSchema = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    comments: {
+        type: [],
+        required: false
     }
 });
 
@@ -38,7 +44,7 @@ const eventSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    detailedDescription: {
+    location: {
         type: String,
         required: true
     },
@@ -63,22 +69,21 @@ const eventSchema = mongoose.Schema({
 // (single user schema) this isn't all obviously, well add more.
 // needs to be done
 const userSchema = mongoose.Schema({
-    name: {
+    username: {
         type: String,
+        minlength: 5,
+        maxlength: 50,
+        unique: true,
         required: true
     },
     password: {
         type: String,
+        minlength: 8,
+        maxlength: 255,
         required: true
-    },
-    comments: {
-        type: [],
     },
     archivedFeeds: {
         type: [],
-    },
-    attending: {
-        type: []
     },
 });
 
@@ -94,10 +99,6 @@ const questionSchema = mongoose.Schema({
     answers: {
         type: String,
         required: true,
-    },
-    score: {
-        type: Number,
-        required: true
     },
     imgUrl: {
         type: String,
