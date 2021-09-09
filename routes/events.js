@@ -9,7 +9,7 @@ const headers = {
     "Access-Control-Allow-Origin": "*", // Required for CORS support to work
     "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
     "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
-    "Access-Control-Allow-Methods": "POST, OPTIONS"
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
 }
 
 //gets all events
@@ -58,14 +58,13 @@ router.post('/', async (req, res) => {
 // patch request goes here
 
 // delete request goes here //requieres admin privileges
-router.delete('/:id', async (req, res) => {
-    const event_num = event.find(c => c.id === parseInt(req.params.id));
-    if (!course) res.status(404).send('The course with the given ID was not found');
+router.delete('/:eventId', async (req, res) => {
+    try{
+        const removedEvent = await EventModel.remove({_id: req.params.eventId}); 
+        res.json(removedEvent);
+    }catch(error){
 
-    const index = event.indexOf(event_num);
-    event.splice(index, 1);
-
-    res.send(course);
+    }
 
 });
 

@@ -22,11 +22,25 @@ router.get('/', async(req, res)=>{
     }
 });
 
+// gets a single or multiple feeds that match the keyword
+router.get('/:title', async (req, res) => {
+    res.header(headers);
+    try {
+        const result = await FeedModel.find({
+            title: {$regex: req.params.title, $options: "i"}
+        });
+        res.send(result);
+    } catch (error) {
+        res.send(error.message);
+    }
+});
+
 // create a specific feed, requieres admin priviliges
 router.post('/', async (req,res)=>{
     res.header(headers);
     const feed = new FeedModel({
         title: req.body.title,
+        detailed: req.body.detailed,
         content: req.body.content,
         imgUrl: req.body.imgUrl,
         author: req.body.author
@@ -40,7 +54,19 @@ router.post('/', async (req,res)=>{
 });
 
 // patch request goes here
+router.patch('/:feedId', async(req,res)=>{
+    const updatedFeed = await FeedModel.updateOne({_id: req.params.feedId});
+});
 
 // delete request goes here //requieres admin privileges
+router.delete('/:feedId', async (req, res) => {
+    try{
+        const removedFeed = await FeedModel.remove({_id: req.params.feedId}, {$set: {}}); 
+        res.json(removedFeed);
+    }catch(error){
+
+    }
+
+});
 
 module.exports = router;
