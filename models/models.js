@@ -25,6 +25,10 @@ const feedSchema = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    comments: {
+        type: [],
+        required: false
     }
 });
 
@@ -38,7 +42,7 @@ const eventSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    detailedDescription: {
+    location: {
         type: String,
         required: true
     },
@@ -63,7 +67,7 @@ const eventSchema = mongoose.Schema({
 // (single user schema) this isn't all obviously, well add more.
 // needs to be done
 const userSchema = mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: true
     },
@@ -71,14 +75,8 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    comments: {
-        type: [],
-    },
     archivedFeeds: {
         type: [],
-    },
-    attending: {
-        type: []
     },
 });
 

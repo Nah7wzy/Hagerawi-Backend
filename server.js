@@ -2,6 +2,7 @@ const express = require('express');
 const eventsRoute = require('./routes/events.js');
 const feedsRoute = require('./routes/feeds.js');
 const questionsRoute = require('./routes/questions.js');
+const usersRoute = require('./routes/users.js');
 const mongoose =  require('mongoose');
 require('dotenv/config'); //go to the .env file and change the database address for mongoose to work
 
@@ -22,6 +23,7 @@ app.use(cors());
 app.use('/feeds', feedsRoute);
 app.use('/events', eventsRoute);
 app.use('/questions', questionsRoute);
+app.use('/users', usersRoute);
 
 app.listen(5000, ()=>{
     console.log(`Server Running on Port: http://localhost:5000`);
