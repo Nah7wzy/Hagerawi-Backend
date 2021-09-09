@@ -63,6 +63,20 @@ const eventSchema = mongoose.Schema({
 // (single user schema) this isn't all obviously, well add more.
 // needs to be done
 const userSchema = mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    comments: {
+        type: [],
+    },
+    archivedFeeds: {
+        type: [],
+    },
     attending: {
         type: []
     },
