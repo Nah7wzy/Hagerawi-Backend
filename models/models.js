@@ -2,33 +2,88 @@ const mongoose = require('mongoose');
 
 //what a single feed is going to look like
 const feedSchema = mongoose.Schema({
-    author: {type: String, required: true},
-    title: { type: String, required: true },
-    content: { type: String, required: true },
-    detailed: { type: String, required: true },
-    imgUrl: { type: String, default: ""},
-    date: { type: Date, default: Date.now }
+    author: {
+        type: String,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    content: {
+        type: String,
+        required: true
+    },
+    detailed: {
+        type: String,
+        required: true
+    },
+    imgUrl: {
+        type: String,
+        default: ""
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 //what a single event is going to look like
 const eventSchema = mongoose.Schema({
-    postedBy: {type: String, required:true},
-    title: { type: String, required: true },
-    detailedDescription: {type: String, required: true},
-    content: { type: String, required: true },
-    imgUrl: { type: String, default: ""},
-    attendees: {type: Number, default: 0},
-    date: { type: Date, default: Date.now }
+    postedBy: {
+        type: String,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    detailedDescription: {
+        type: String,
+        required: true
+    },
+    content: {
+        type: String,
+        required: true
+    },
+    imgUrl: {
+        type: String,
+        default: ""
+    },
+    attendees: {
+        type: Number,
+        default: 0
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 // (single user schema) this isn't all obviously, well add more.
 // needs to be done
 const userSchema = mongoose.Schema({
-   attending: {type: []},
+    name: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    comments: {
+        type: [],
+    },
+    archivedFeeds: {
+        type: [],
+    },
+    attending: {
+        type: []
+    },
 });
 
 const questionSchema = mongoose.Schema({
-    question: {
+    questions: {
         type: String,
         required: true
     },
@@ -43,6 +98,9 @@ const questionSchema = mongoose.Schema({
     score: {
         type: Number,
         required: true
+    },
+    imgUrl: {
+        type: String,
     }
 
 });
@@ -52,4 +110,9 @@ const EventModel = mongoose.model('events', eventSchema);
 const UserModel = mongoose.model('users', userSchema);
 const QuestionModel = mongoose.model('question', questionSchema);
 
-module.exports = {FeedModel, EventModel, UserModel, QuestionModel};
+module.exports = {
+    FeedModel,
+    EventModel,
+    UserModel,
+    QuestionModel
+};
