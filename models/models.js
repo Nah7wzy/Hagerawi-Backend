@@ -1,4 +1,8 @@
-const Joi = require('@hapi/joi');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const {
+    functionsIn
+} = require('lodash');
 
 const mongoose = require('mongoose');
 
@@ -84,9 +88,17 @@ const userSchema = mongoose.Schema({
     },
     archivedFeeds: {
         type: [],
-    },
+    }
 });
 
+userSchema.methods.generateAuthToken =  function () {
+    const token = jwt.sign({
+        _id: this._id
+    }, config.get('jwtPrivateKey'));
+    return token;
+}
+
+// the question schema
 const questionSchema = mongoose.Schema({
     questions: {
         type: String,
