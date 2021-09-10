@@ -1,5 +1,6 @@
 const express = require('express');
 const admin = require('../middleware/admin.js');
+const auth = require('../middleware/auth.js');
 const {QuestionModel} = require('../models/models.js');
 
 const router = express.Router();
@@ -22,7 +23,7 @@ router.get('/', async(req,res) => {
     }
 });
 
-router.post('/', admin, async (req, res) => {
+router.post('/', auth, async (req, res) => {
     res.header(headers);
     const question = new QuestionModel({
         question: req.body.question,

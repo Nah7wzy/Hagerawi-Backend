@@ -1,5 +1,5 @@
 const express = require('express');
-const admin = require('../middleware/admin.js');
+const auth = require('../middleware/auth.js');
 const {
     FeedModel
 } = require('../models/models.js');
@@ -44,7 +44,7 @@ router.get('/:title', async (req, res) => {
 });
 
 // create a specific feed, requieres admin priviliges
-router.post('/', admin, async (req, res) => {
+router.post('/', auth, async (req, res) => {
     res.header(headers);
     const feed = new FeedModel({
         title: req.body.title,
@@ -62,14 +62,14 @@ router.post('/', admin, async (req, res) => {
 });
 
 // patch request goes here
-router.patch('/:feedId', admin, async (req, res) => {
+router.patch('/:feedId', auth, async (req, res) => {
     const updatedFeed = await FeedModel.updateOne({
         _id: req.params.feedId
     });
 });
 
 // delete request goes here //requieres admin privileges
-router.delete('/:feedId', admin, async (req, res) => {
+router.delete('/:feedId', auth, async (req, res) => {
     try {
         const removedFeed = await FeedModel.remove({
             _id: req.params.feedId
