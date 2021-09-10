@@ -1,4 +1,5 @@
 const express = require('express');
+const admin = require('../middleware/admin.js');
 const {QuestionModel} = require('../models/models.js');
 
 const router = express.Router();
@@ -18,6 +19,22 @@ router.get('/', async(req,res) => {
         res.send(theQues);
     } catch (err){
         res.send({error:err});
+    }
+});
+
+router.post('/', admin, async (req, res) => {
+    res.header(headers);
+    const question = new QuestionModel({
+        question: req.body.question,
+        choices: req.body.choices,
+        answers: req.body.answers,
+        imgUrl: req.body.imgUrl,
+    });
+    try {
+        await question.save();
+        res.send(question);
+    } catch (error) {
+        res.send(error.message);
     }
 });
 

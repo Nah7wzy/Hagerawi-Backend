@@ -1,4 +1,5 @@
 const express = require('express');
+const admin = require('../middleware/admin.js');
 const {EventModel} = require('../models/models.js');
 // import { v4 as uuidv4 } from 'uuid';
 
@@ -37,7 +38,7 @@ router.get('/:title', async (req, res) => {
 });
 
 //post an event; admin privileges required 
-router.post('/', async (req, res) => {
+router.post('/', admin, async (req, res) => {
     res.header(headers);
     const event = new EventModel({
         postedBy: req.body.postedBy,
@@ -58,9 +59,9 @@ router.post('/', async (req, res) => {
 // patch request goes here
 
 // delete request goes here //requieres admin privileges
-router.delete('/:eventId', async (req, res) => {
+router.delete('/:eventId', admin, async (req, res) => {
     try{
-        const removedEvent = await EventModel.remove({_id: req.params.eventId}); 
+        const removedEvent = await EventModel.deleteOne({_id: req.params.eventId}); 
         res.json(removedEvent);
     }catch(error){
 
