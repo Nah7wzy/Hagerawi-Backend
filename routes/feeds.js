@@ -1,5 +1,8 @@
 const express = require('express');
-const {FeedModel} = require('../models/models.js');
+const admin = require('../middleware/admin.js');
+const {
+    FeedModel
+} = require('../models/models.js');
 
 const router = express.Router();
 
@@ -12,13 +15,15 @@ const headers = {
 }
 
 // gets all feeds in our database
-router.get('/', async(req, res)=>{
+router.get('/', async (req, res) => {
     res.header(headers);
     try {
         const theFeeds = await FeedModel.find();
         res.send(theFeeds);
     } catch (err) {
-        res.send({error:err});
+        res.send({
+            error: err
+        });
     }
 });
 
@@ -27,7 +32,10 @@ router.get('/:title', async (req, res) => {
     res.header(headers);
     try {
         const result = await FeedModel.find({
-            title: {$regex: req.params.title, $options: "i"}
+            title: {
+                $regex: req.params.title,
+                $options: "i"
+            }
         });
         res.send(result);
     } catch (error) {
@@ -36,7 +44,7 @@ router.get('/:title', async (req, res) => {
 });
 
 // create a specific feed, requieres admin priviliges
-router.post('/', async (req,res)=>{
+router.post('/', admin, async (req, res) => {
     res.header(headers);
     const feed = new FeedModel({
         title: req.body.title,
@@ -48,22 +56,28 @@ router.post('/', async (req,res)=>{
     try {
         const savedFeed = await feed.save();
         res.send(savedFeed);
-    } catch (error){
+    } catch (error) {
         res.send(error);
     }
 });
 
 // patch request goes here
-router.patch('/:feedId', async(req,res)=>{
-    const updatedFeed = await FeedModel.updateOne({_id: req.params.feedId});
+router.patch('/:feedId', admin, async (req, res) => {
+    const updatedFeed = await FeedModel.updateOne({
+        _id: req.params.feedId
+    });
 });
 
 // delete request goes here //requieres admin privileges
-router.delete('/:feedId', async (req, res) => {
-    try{
-        const removedFeed = await FeedModel.remove({_id: req.params.feedId}, {$set: {}}); 
+router.delete('/:feedId', admin, async (req, res) => {
+    try {
+        const removedFeed = await FeedModel.remove({
+            _id: req.params.feedId
+        }, {
+            $set: {}
+        });
         res.json(removedFeed);
-    }catch(error){
+    } catch (error) {
 
     }
 

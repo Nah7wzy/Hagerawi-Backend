@@ -27,6 +27,7 @@ app.use(express.json());
 const cors = require("cors");
 app.use(cors());
 //these are called middlewares that handle our requests (the logic is actually somwhere else) 
+app.use(express.json());
 app.use('/feeds', feedsRoute);
 app.use('/events', eventsRoute);
 app.use('/questions', questionsRoute);

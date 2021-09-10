@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const {
-    FeedModel, QuestionModel
+    FeedModel, QuestionModel, UserModel
 } = require('./models/models');
 require('dotenv/config'); //go to the .env file and change the database address for mongoose to work
 
@@ -114,5 +114,16 @@ async function theEvents() {
     
 }
 
+async function theAdmin() {
+    const admn = new UserModel({
+        username: "Wanaw Sewye",
+        password: "12345",
+        archivedFeeds: [],
+        isAdmin: true,
+    })
+    const res = await admn.save();
+}
+
+theAdmin();
 defaultFeeds();
 theQuestions();

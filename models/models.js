@@ -88,19 +88,23 @@ const userSchema = mongoose.Schema({
     },
     archivedFeeds: {
         type: [],
+    },
+    isAdmin: {
+        type: Boolean,
     }
 });
 
-userSchema.methods.generateAuthToken =  function () {
+userSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({
-        _id: this._id
+        _id: this._id,
+        isAdmin: this.isAdmin,
     }, config.get('jwtPrivateKey'));
     return token;
 }
 
 // the question schema
 const questionSchema = mongoose.Schema({
-    questions: {
+    question: {
         type: String,
         required: true
     },

@@ -1,11 +1,10 @@
-const config = require('config');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const {
     UserModel,
     validate
 } = require('../models/models');
+const admin = require('../middleware/admin.js');
 
 const router = express.Router();
 
@@ -15,8 +14,8 @@ const headers = {
     "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
 }
-// gets all users
-router.get('/', async (req, res) => {
+// gets all users, requires admin privelege
+router.get('/', admin, async (req, res) => {
     res.header(headers);
     try {
         const users = await UserModel.find();
@@ -26,8 +25,8 @@ router.get('/', async (req, res) => {
     }
 });
 
-// get specific user 
-router.get('/:username', async (req, res) => {
+// get specific user, requires admin privelege
+router.get('/:username', admin, async (req, res) => {
     res.header(headers);
     try {
         const result = await UserModel.find({
@@ -57,10 +56,10 @@ router.post('/', async (req, res) => {
     user.password = await bcrypt.hash(user.password, salt);
     try {
         await user.save();
-        
+
         // this is the token that is to be saved on the client side,
         // it will be available on the headers
-        const token = user.generateAuthToken(); 
+        const token = user.generateAuthToken();
         res.header('x-auth-token', token).send(user.username);
     } catch (error) {
         res.send(error.message);
@@ -68,7 +67,7 @@ router.post('/', async (req, res) => {
 });
 
 // when admin deletes a user account 
-router.delete('/:username', async (req, res) => {
+router.delete('/:username', admin, async (req, res) => {
     try {
         const deletedUser = await UserModel.deleteOne({
             username: req.params.username

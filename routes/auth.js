@@ -15,7 +15,6 @@ const headers = {
 
 router.post('/', async (req, res) => {
     res.header(headers);
-
     let user = await UserModel.findOne({
         username: req.body.username
     });

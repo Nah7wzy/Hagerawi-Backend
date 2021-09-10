@@ -4,3 +4,6 @@ requiered packages:
     - mongoose
     - dotenv
     - cors
+    - config
+    - jsonwebtoken
+    - bcryptjs
