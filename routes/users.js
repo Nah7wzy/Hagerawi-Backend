@@ -15,7 +15,7 @@ const headers = {
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
 }
 // gets all users, requires admin privelege
-router.get('/', admin, async (req, res) => {
+router.get('/', async (req, res) => {
     res.header(headers);
     try {
         const users = await UserModel.find();
@@ -67,10 +67,10 @@ router.post('/', async (req, res) => {
 });
 
 // when admin deletes a user account 
-router.delete('/:username', admin, async (req, res) => {
+router.delete('/:id', admin, async (req, res) => {
     try {
         const deletedUser = await UserModel.deleteOne({
-            username: req.params.username
+            _id: req.params.id
         });
         res.json(deletedUser);
     } catch (error) {
