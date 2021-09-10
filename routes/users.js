@@ -37,6 +37,24 @@ router.get('/:username', auth, async (req, res) => {
     }
 });
 
+// code for user to update his/her account details
+router.patch('/me', async (req, res) => {
+    const usr = await UserModel.findById(req);
+    console.log(usr);
+    try {
+        usr.set({
+            username: req.body.username,
+            password: req.body.password,
+        });
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+        await user.save();
+        res.send(user);
+    } catch (error) {
+        res.send(error);
+    }
+});
+
 // when user signs up 
 router.post('/', async (req, res) => {
     res.header(headers);

@@ -26,8 +26,9 @@ router.post('/', async (req, res) => {
 
     const token = user.generateAuthToken();
 
-    // res.send(token);
-    res.header('x-auth-token', token).send(token);
+    // code to return token as header if user is admin...
+    (user.isAdmin) ? res.header('x-auth-token', token).send(token): res.send(token);
+
 });
 
 module.exports = router;
