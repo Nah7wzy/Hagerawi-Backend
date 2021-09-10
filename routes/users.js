@@ -1,3 +1,6 @@
+const config = require('config');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const express = require('express');
 const {
     UserModel,
@@ -50,9 +53,15 @@ router.post('/', async (req, res) => {
         password: req.body.password,
         archivedFeeds: req.body.archivedFeeds,
     });
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
     try {
         await user.save();
-        res.send(user);
+        
+        // this is the token that is to be saved on the client side,
+        // it will be available on the headers
+        const token = user.generateAuthToken(); 
+        res.header('x-auth-token', token).send(user.username);
     } catch (error) {
         res.send(error.message);
     }
@@ -61,7 +70,7 @@ router.post('/', async (req, res) => {
 // when admin deletes a user account 
 router.delete('/:username', async (req, res) => {
     try {
-        const deletedUser = await UserModel.remove({
+        const deletedUser = await UserModel.deleteOne({
             username: req.params.username
         });
         res.json(deletedUser);
