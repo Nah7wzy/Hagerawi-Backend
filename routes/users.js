@@ -3,7 +3,7 @@ const express = require('express');
 const {
     UserModel
 } = require('../models/models');
-const admin = require('../middleware/admin.js');
+const auth = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ const headers = {
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
 }
 // gets all users, requires admin privelege
-router.get('/', admin, async (req, res) => {
+router.get('/', auth, async (req, res) => {
     res.header(headers);
     try {
         const users = await UserModel.find();
@@ -25,7 +25,7 @@ router.get('/', admin, async (req, res) => {
 });
 
 // get specific user, requires admin privelege
-router.get('/:username', admin, async (req, res) => {
+router.get('/:username', auth, async (req, res) => {
     res.header(headers);
     try {
         const result = await UserModel.find({
@@ -67,7 +67,7 @@ router.post('/', async (req, res) => {
 });
 
 // when admin deletes a user account 
-router.delete('/:id', admin, async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     try {
         const deletedUser = await UserModel.deleteOne({
             _id: req.params.id
