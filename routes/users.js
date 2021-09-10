@@ -1,8 +1,7 @@
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const {
-    UserModel,
-    validate
+    UserModel
 } = require('../models/models');
 const admin = require('../middleware/admin.js');
 
@@ -15,7 +14,7 @@ const headers = {
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
 }
 // gets all users, requires admin privelege
-router.get('/', async (req, res) => {
+router.get('/', admin, async (req, res) => {
     res.header(headers);
     try {
         const users = await UserModel.find();
@@ -60,7 +59,8 @@ router.post('/', async (req, res) => {
         // this is the token that is to be saved on the client side,
         // it will be available on the headers
         const token = user.generateAuthToken();
-        res.header('x-auth-token', token).send(user.username);
+        // res.header('x-auth-token', token).send(user);
+        res.send(token);
     } catch (error) {
         res.send(error.message);
     }
