@@ -62,24 +62,29 @@ router.post('/', async (req, res) => {
     let user = await UserModel.findOne({
         username: req.body.username
     });
-    if (user) return res.status(400).send("User already exists!");
-
-    user = new UserModel({
-        username: req.body.username,
-        password: req.body.password,
-        archivedFeeds: req.body.archivedFeeds,
-    });
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
+    if (user) return res.status(400).send({"username": "User already exists!"});
+    // console.log(req.body);
+    
     try {
-        await user.save();
+        const theUser = new UserModel({
+            username: req.body.username,
+            password: req.body.password,
+            archivedFeeds: req.body.archivedFeeds,
+        });
+        console.log(theUser);
+        const salt = await bcrypt.genSalt(10);
+        theUser.password = await (await bcrypt.hash(theUser.password, salt));
+        const theActualUser = await theUser.save();
+        console.log(`the actual user is ${theActualUser}`);
 
         // this is the token that is to be saved on the client side,
         // it will be available on the headers
-        const token = user.generateAuthToken();
+        const token = theUser.generateAuthToken();
         // res.header('x-auth-token', token).send(user);
-        res.send(token);
+        // res.send(token).send(user);
+        res.send(theUser);
     } catch (error) {
+        console.log(error);
         res.send(error.message);
     }
 });
