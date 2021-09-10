@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const {
-    FeedModel, QuestionModel, UserModel
+    FeedModel, QuestionModel, UserModel, EventModel
 } = require('./models/models');
 require('dotenv/config'); //go to the .env file and change the database address for mongoose to work
 
@@ -112,7 +112,39 @@ async function theQuestions() {
 }
 
 async function theEvents() {
-    
+    const eve1 = EventModel({
+        postedBy: "Kebena House",
+        title: "የሐገር ፍቅር ፕሮግራም",
+        location: "Kebena House",
+        content: "ቅዳሜ በሶስተኛው የሐገር ፍቅር ልዪ ዝግጅት የታዋቂው መምህርና ጸሀፊ ፕሮፌሰር ደረጄ ገብሬ አዲሱ ''መራሔ ንባብ'' የተሰኘውና ሌሎችም መጽሐፍቶች ለሽያጭ ይቀርባሉ:: ከጸሀፊው ከፕ/ር ደረጄ ጋርም እንዲሁ የትውውቅ ሥነስርዓት ይኖራል:: ",
+        imgUrl: "",
+    });
+    await eve1.save();
+
+    const eve2 = EventModel({
+        postedBy: "Union",
+        title: "Glitz and Glamour",
+        location: "Union Restaurant, around Olompyia Bole",
+        content: "Union Restaurant invites your for their New Year's Eve Party.",
+        imgUrl: "",
+    });
+    await eve2.save();
+    const eve3 = EventModel({
+        postedBy: "Century Promotion and Events",
+        title: "New Year's Eve Addis Expo",
+        location: "Ghion Hotel",
+        content: "Century Promotion and Events presents you an exuberant New Year's Eve music festival featuring Yared Negu, Getachew Hailemariam, Zebiba Girma, Hailu Jano, Abinet Girma and Heran Gedion ",
+        imgUrl: "",
+    });
+    await eve3.save();
+    const eve4 = EventModel({
+        postedBy: "አርቲሳን ባዛር",
+        title: "ኑ ጭቃ እናቡካ",
+        location: "ሙልሙል ዳቦ ቤት አካባቢ",
+        content: "Nu Chika Enabuka Art Center is hosting an Artisaans Bazaar. The bazaar includes handicrafts sale event and children's marketplace and activities along with foods and drinks. ",
+        imgUrl: "",
+    });
+    await eve4.save();
 }
 
 async function theAdmin() {
@@ -130,3 +162,4 @@ async function theAdmin() {
 theAdmin();
 defaultFeeds();
 theQuestions();
+theEvents();
