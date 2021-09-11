@@ -13,7 +13,7 @@ const headers = {
     "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
 }
-
+ 
 // gets all feeds in our database
 router.get('/', async (req, res) => {
     res.header(headers);
@@ -62,10 +62,17 @@ router.post('/', auth, async (req, res) => {
 });
 
 // patch request goes here
-router.patch('/:feedId', auth, async (req, res) => {
-    const updatedFeed = await FeedModel.updateOne({
-        _id: req.params.feedId
-    });
+router.patch('/:t', auth, async (req, res) => {
+    try{
+        const updatedFeed = await FeedModel.updateOne(
+            {title: req.params.t},
+            {$set: {comments: req.body.comments}
+        });
+        res.json(updatedFeed).send(204);
+        console.log(updatedFeed);
+    }catch(err){
+        console.log(`the error in patch: ${err}`);
+    }
 });
 
 // delete request goes here //requieres admin privileges
@@ -74,11 +81,11 @@ router.delete('/:feedId', auth, async (req, res) => {
         const removedFeed = await FeedModel.remove({
             _id: req.params.feedId
         }, {
-            $set: {}
+            $set: {comments : req.body.comments}
         });
         res.json(removedFeed);
     } catch (error) {
-
+        res.json(error.message);
     }
 
 });
