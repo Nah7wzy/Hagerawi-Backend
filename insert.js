@@ -151,7 +151,7 @@ async function theAdmin() {
     const salt = await bcrypt.genSalt(10);
     let = myPword = await bcrypt.hash("12345678", salt);
     const admn = new UserModel({
-        username: "Wanaw Sewye",
+        username: "WanawSewye",
         password: myPword,
         archivedFeeds: [],
         isAdmin: true,
