@@ -23,6 +23,29 @@ router.get('/', async(req,res) => {
     }
 });
 
+router.patch('/:id', auth, async (req, res) => {
+    res.header(headers);
+    const filter = {
+        _id: req.params.id
+    };
+    console.log(req.params.id);
+
+    let e = await QuestionModel.findById(req.params.id);
+
+    const updater = {
+        choices: (req.body.choices) ? req.body.choices : e.choices,
+        question: (req.body.question) ? req.body.question : e.question,
+        answers: (req.body.answers) ? req.body.answers : e.answers,
+        imgUrl: (req.body.imgUrl) ? req.body.imgUrl : e.imgUrl,
+    };
+    console.log(req.body.question);
+    let ev = await QuestionModel.findOneAndUpdate(filter, updater);
+
+    ev = await QuestionModel.findOne(filter);
+
+    res.send(ev);
+});
+
 router.post('/', auth, async (req, res) => {
     res.header(headers);
     const question = new QuestionModel({
@@ -36,6 +59,17 @@ router.post('/', auth, async (req, res) => {
         res.send(question);
     } catch (error) {
         res.send(error.message);
+    }
+});
+
+router.delete('/:id', auth, async(req, res) => {
+    try {
+        const removedQuestion = await QuestionModel.deleteOne({
+            _id: req.params.id
+        });
+        res.json(removedQuestion);
+    } catch (error) {
+        res.send(error);
     }
 });
 
