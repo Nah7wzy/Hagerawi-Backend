@@ -13,7 +13,7 @@ const headers = {
     "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
 }
-
+ 
 // gets all feeds in our database
 router.get('/', async (req, res) => {
     res.header(headers);
@@ -90,6 +90,7 @@ router.delete('/:id', auth, async (req, res) => {
 
     const fd = await FeedModel.findById(req.params.id);
     if (!fd) res.send("ID doesnt exist!");
+
 
     const removedFeed = await FeedModel.deleteOne({
         _id: req.params.id
