@@ -13,7 +13,7 @@ const headers = {
     "Access-Control-Allow-Headers": "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS"
 }
-
+ 
 // gets all feeds in our database
 router.get('/', async (req, res) => {
     res.header(headers);
@@ -61,8 +61,24 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
+// router.patch('/:t', auth, async (req, res) => {
+//     res.header(headers);
+//     try{
+//         const updatedFeed = await FeedModel.updateOne(
+//             {title: req.params.t},
+//             {$set: {comments: req.body.comments}
+//         });
+
+//         const token = user.generateAuthToken();
+
+//         res.json(updatedFeed).send(204).header(token);
+//         console.log(updatedFeed);
+//     }catch(err){
+//         console.log(`the error in patch: ${err}`);
+//     }
+
 // patch request goes here
-router.patch('/:id', auth, async (req, res) => {
+router.patch('/:id', async (req, res) => {
     res.header(headers);
     const filter = {
         _id: req.params.id
@@ -90,6 +106,7 @@ router.delete('/:id', auth, async (req, res) => {
 
     const fd = await FeedModel.findById(req.params.id);
     if (!fd) res.send("ID doesnt exist!");
+
 
     const removedFeed = await FeedModel.deleteOne({
         _id: req.params.id
