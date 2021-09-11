@@ -61,37 +61,57 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
+// router.patch('/:t', auth, async (req, res) => {
+//     res.header(headers);
+//     try{
+//         const updatedFeed = await FeedModel.updateOne(
+//             {title: req.params.t},
+//             {$set: {comments: req.body.comments}
+//         });
+
+//         const token = user.generateAuthToken();
+
+//         res.json(updatedFeed).send(204).header(token);
+//         console.log(updatedFeed);
+//     }catch(err){
+//         console.log(`the error in patch: ${err}`);
+//     }
+
 // patch request goes here
-router.patch('/:t', auth, async (req, res) => {
+router.patch('/:id', auth, async (req, res) => {
     res.header(headers);
-    try{
-        const updatedFeed = await FeedModel.updateOne(
-            {title: req.params.t},
-            {$set: {comments: req.body.comments}
-        });
+    const filter = {
+        _id: req.params.id
+    };
+    console.log(req.params.id);
 
-        const token = user.generateAuthToken();
+    const updater = {
+        author: (req.body.author) ? req.body.author : e.author,
+        title: (req.body.title) ? req.body.title : e.title,
+        content: (req.body.content) ? req.body.content : e.content,
+        detailed: (req.body.detailed) ? req.body.detailed : e.detailed,
+        imgUrl: (req.body.imgUrl) ? req.body.imgUrl : e.imgUrl,
+    };
+    console.log(req.body.author);
+    let fd = await FeedModel.findOneAndUpdate(filter, updater);
 
-        res.json(updatedFeed).send(204).header(token);
-        console.log(updatedFeed);
-    }catch(err){
-        console.log(`the error in patch: ${err}`);
-    }
+    fd = await FeedModel.findOne(filter);
+
+    res.send(fd);
 });
 
 // delete request goes here //requieres admin privileges
-router.delete('/:feedId', auth, async (req, res) => {
-    try {
-        const removedFeed = await FeedModel.remove({
-            _id: req.params.feedId
-        }, {
-            $set: {comments : req.body.comments}
-        });
-        res.json(removedFeed);
-    } catch (error) {
-        res.json(error.message);
-    }
+router.delete('/:id', auth, async (req, res) => {
+    res.header(headers);
 
+    const fd = await FeedModel.findById(req.params.id);
+    if (!fd) res.send("ID doesnt exist!");
+
+
+    const removedFeed = await FeedModel.deleteOne({
+        _id: req.params.id
+    });
+    res.json(removedFeed);
 });
 
 module.exports = router;
