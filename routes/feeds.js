@@ -63,12 +63,16 @@ router.post('/', auth, async (req, res) => {
 
 // patch request goes here
 router.patch('/:t', auth, async (req, res) => {
+    res.header(headers);
     try{
         const updatedFeed = await FeedModel.updateOne(
             {title: req.params.t},
             {$set: {comments: req.body.comments}
         });
-        res.json(updatedFeed).send(204);
+
+        const token = user.generateAuthToken();
+
+        res.json(updatedFeed).send(204).header(token);
         console.log(updatedFeed);
     }catch(err){
         console.log(`the error in patch: ${err}`);
