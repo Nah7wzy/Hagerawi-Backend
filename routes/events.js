@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
 });
 
 //post an event; admin privileges required 
-router.post('/', auth, async (req, res) => {
+router.post('/', async (req, res) => {
     res.header(headers);
     const event = new EventModel({
         postedBy: req.body.postedBy,
