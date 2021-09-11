@@ -38,21 +38,29 @@ router.get('/:username', auth, async (req, res) => {
 });
 
 // code for user to update his/her account details
-router.patch('/me', async (req, res) => {
-    const usr = await UserModel.findById(req);
-    console.log(usr);
-    try {
-        usr.set({
-            username: req.body.username,
-            password: req.body.password,
-        });
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(user.password, salt);
-        await user.save();
-        res.send(user);
-    } catch (error) {
-        res.send(error);
+router.patch('/:username', async (req, res) => {
+    res.header(headers);
+    const filter = {
+        username: req.params.username
+    };
+    console.log(req.params.username);
+    const salt = await bcrypt.genSalt(10);
+
+    let demo = UserModel.findOne({
+        username: req.params.username
+    });
+    const updater = {
+        username: (req.body.username) ? req.body.username : demo.username,
+        password: await bcrypt.hash(req.body.password, salt),
     }
+    let usr = await UserModel.findOneAndUpdate(filter, updater);
+    console.log(usr);
+
+    usr = await UserModel.findOne(filter);
+    console.log("the new user ", usr);
+
+    res.send(usr);
+
 });
 
 // when user signs up 

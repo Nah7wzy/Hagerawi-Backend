@@ -1,6 +1,8 @@
 const express = require('express');
 const auth = require('../middleware/auth.js');
-const {EventModel} = require('../models/models.js');
+const {
+    EventModel
+} = require('../models/models.js');
 // import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
@@ -25,12 +27,10 @@ router.get('/', async (req, res) => {
 });
 
 // gets a specific event by title
-router.get('/:title', async (req, res) => {
+router.get('/:id', async (req, res) => {
     res.header(headers);
     try {
-        const result = await EventModel.find({
-            title: req.params.title
-        });
+        const result = await EventModel.findById(req.params.id);
         res.send(result);
     } catch (error) {
         res.send(error.message);
@@ -43,9 +43,10 @@ router.post('/', auth, async (req, res) => {
     const event = new EventModel({
         postedBy: req.body.postedBy,
         title: req.body.title,
-        detailedDescription: req.body.detailedDescription,
+        attendees: req.body.attendees,
         content: req.body.content,
         imgUrl: req.body.imgUrl,
+        location: req.body.location,
     });
     try {
         const savedEvent = await event.save();
@@ -55,16 +56,41 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
-
 // patch request goes here
+router.patch('/:id', auth, async (req, res) => {
+    res.header(headers);
+    const filter = {
+        _id: req.params.id
+    };
+    console.log(req.params.id);
+
+    let e = await EventModel.findById(req.params.id);
+
+    const updater = {
+        postedBy: (req.body.postedBy) ? req.body.postedBy : e.postedBy,
+        title: (req.body.title) ? req.body.title : e.title,
+        content: (req.body.content) ? req.body.content : e.content,
+        attendees: (req.body.attendees) ? req.body.attendees : e.attendees,
+        imgUrl: (req.body.imgUrl) ? req.body.imgUrl : e.imgUrl,
+        location: (req.body.location) ? req.body.location : e.location,
+    };
+    console.log(req.body.postedBy);
+    let ev = await EventModel.findOneAndUpdate(filter, updater);
+
+    ev = await EventModel.findOne(filter);
+
+    res.send(ev);
+});
 
 // delete request goes here //requieres admin privileges
-router.delete('/:eventId', auth, async (req, res) => {
-    try{
-        const removedEvent = await EventModel.deleteOne({_id: req.params.eventId}); 
+router.delete('/:id', auth, async (req, res) => {
+    try {
+        const removedEvent = await EventModel.deleteOne({
+            _id: req.params.id
+        });
         res.json(removedEvent);
-    }catch(error){
-
+    } catch (error) {
+        res.send(error);
     }
 
 });

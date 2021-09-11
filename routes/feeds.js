@@ -62,25 +62,39 @@ router.post('/', auth, async (req, res) => {
 });
 
 // patch request goes here
-router.patch('/:feedId', auth, async (req, res) => {
-    const updatedFeed = await FeedModel.updateOne({
-        _id: req.params.feedId
-    });
+router.patch('/:id', auth, async (req, res) => {
+    res.header(headers);
+    const filter = {
+        _id: req.params.id
+    };
+    console.log(req.params.id);
+
+    const updater = {
+        author: (req.body.author) ? req.body.author : e.author,
+        title: (req.body.title) ? req.body.title : e.title,
+        content: (req.body.content) ? req.body.content : e.content,
+        detailed: (req.body.detailed) ? req.body.detailed : e.detailed,
+        imgUrl: (req.body.imgUrl) ? req.body.imgUrl : e.imgUrl,
+    };
+    console.log(req.body.author);
+    let fd = await FeedModel.findOneAndUpdate(filter, updater);
+
+    fd = await FeedModel.findOne(filter);
+
+    res.send(fd);
 });
 
 // delete request goes here //requieres admin privileges
-router.delete('/:feedId', auth, async (req, res) => {
-    try {
-        const removedFeed = await FeedModel.remove({
-            _id: req.params.feedId
-        }, {
-            $set: {}
-        });
-        res.json(removedFeed);
-    } catch (error) {
+router.delete('/:id', auth, async (req, res) => {
+    res.header(headers);
 
-    }
+    const fd = await FeedModel.findById(req.params.id);
+    if (!fd) res.send("ID doesnt exist!");
 
+    const removedFeed = await FeedModel.deleteOne({
+        _id: req.params.id
+    });
+    res.json(removedFeed);
 });
 
 module.exports = router;
