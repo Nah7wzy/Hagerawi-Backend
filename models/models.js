@@ -61,8 +61,8 @@ const eventSchema = mongoose.Schema({
         default: ""
     },
     attendees: {
-        type: Number,
-        default: 0
+        type: String,
+        default: ""
     },
     date: {
         type: Date,
